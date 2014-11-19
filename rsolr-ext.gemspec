@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 0.9.2'
   s.add_development_dependency 'rdoc', '~> 3.9.4'
   s.add_development_dependency 'rspec', '~> 2.6.0'
-  s.add_development_dependency 'rcov'
+  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'awesome_print'
 end
 

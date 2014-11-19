@@ -1,7 +1,8 @@
 module RSolr::Ext::Request
-  
+
+
   module Params
-    
+
     def map input_params
       input = input_params.dup
       
@@ -36,7 +37,15 @@ module RSolr::Ext::Request
       end
       if facets = input.delete(:facets)
         output[:facet] = true
-        output['facet.field'] = append_to_param output['facet.field'], build_query(facets.values), false
+        if facets.has_key? :fields
+          output['facet.field'] = append_to_param output['facet.field'], build_query(facets[:fields]), false
+        end
+        if facets.has_key? :queries
+          output['facet.query'] = []
+          facets[:queries].each_pair do |key, value|
+            output['facet.query'] << "{!key=#{key.to_s}}#{value}"
+          end
+        end
       end
       output.merge input
     end

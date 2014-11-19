@@ -132,7 +132,6 @@ describe RSolr::Ext do
   end
 
   context 'requests' do
-
     it 'should create a valid request' do
       solr_params = RSolr::Ext::Request.map(
         :page=>'2',
@@ -141,7 +140,12 @@ describe RSolr::Ext do
         :filters=>['test', {:price=>(1..10)}],
         :phrase_filters=>{:manu=>['Apple']},
         :queries=>'ipod',
-        :facets=>{:fields=>['cat', 'blah']},
+        :facets=>{
+            :fields=>['cat', 'blah'],
+            :queries=>{
+                :foo => 'bar',
+            }
+        },
         :spellcheck => true
       )
       ["test", "price:[1 TO 10]", "manu:\"Apple\""].should == solr_params[:fq]
@@ -149,6 +153,7 @@ describe RSolr::Ext do
       solr_params[:rows].should == 10
       solr_params[:q].should == "ipod name:\"This is a phrase\""
       solr_params['facet.field'].should == ['cat', 'blah']
+      solr_params['facet.query'].should == ['{!key=foo}bar']
       solr_params[:facet].should == true
     end
 
